@@ -2,11 +2,11 @@ import numpy as np
 import cv2
 
 
-def IdentifyNumbers():
+def IdentifyNumbers(img):
     image = cv2.imread('images/digits.png')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     small = cv2.pyrDown(image)
-    cv2.imshow('Digits Image', small)
+    #cv2.imshow('Digits Image', small)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -41,20 +41,21 @@ def IdentifyNumbers():
     print("Accuracy is = %.2f" % accuracy + "%")
 
 
-    image = cv2.imread('images/numbers.jpg')
+    #image = cv2.imread('images/numbers.jpg')
+    image = img
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    cv2.imshow("image", image)
-    cv2.imshow("gray", gray)
-    cv2.waitKey(0)
+    #cv2.imshow("image", image)
+    #cv2.imshow("gray", gray)
+    #cv2.waitKey(0)
 
     # Blur image then find edges using Canny
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-    cv2.imshow("blurred", blurred)
-    cv2.waitKey(0)
+    #cv2.imshow("blurred", blurred)
+    #cv2.waitKey(0)
 
     edged = cv2.Canny(blurred, 30, 150)
-    cv2.imshow("edged", edged)
-    cv2.waitKey(0)
+    #cv2.imshow("edged", edged)
+    #cv2.waitKey(0)
 
     # Fint Contours
     contours, _ = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -78,7 +79,7 @@ def IdentifyNumbers():
             ret, roi = cv2.threshold(roi, 127, 255, cv2.THRESH_BINARY_INV)
             squared = makeSquare(roi)
             final = resize_to_pixel(20, squared)
-            cv2.imshow("final", final)
+            ##########cv2.imshow("final", final)
             final_array = final.reshape((1, 400))
             final_array = final_array.astype(np.float32)
             ret, result, neighbours, dist = knn.find_nearest(final_array, k=1)
@@ -89,11 +90,12 @@ def IdentifyNumbers():
             cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
             cv2.putText(image, number, (x, y + 155),
                         cv2.FONT_HERSHEY_COMPLEX, 2, (255, 0, 0), 2)
-            cv2.imshow("image", image)
-            cv2.waitKey(0)
+            ##########cv2.imshow("image", image)
+            print("########### NUMBER DETECTED = ",number)
+            #cv2.waitKey(0)
 
     cv2.destroyAllWindows()
-    print ("The number is: " + ''.join(full_number))
+    #print ("The number is: " + ''.join(full_number))
 
 
 def x_cord_contour(contour):
@@ -162,6 +164,3 @@ def resize_to_pixel(dimensions, image):
     # print("Padded Height = ", height, "Width = ", width)
     return ReSizedImg
 
-
-
-IdentifyNumbers()
