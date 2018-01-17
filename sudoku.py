@@ -1,6 +1,7 @@
 
 import cv2
 import numpy as np
+import digitRecog as dr
 
 
 def rectify(h):
@@ -108,7 +109,7 @@ Perimeter_of_Contour = cv2.arcLength(Required_Square_Contour, True)
 Temp_Square_Countour = cv2.approxPolyDP(Required_Square_Contour, 0.05 * Perimeter_of_Contour, True)
 cv2.drawContours(sudoku_image, Required_Square_Contour, -1, (0, 255, 0), 3)
 
-'''
+
 for c in contours:
     
     p = cv2.arcLength(c, True)
@@ -119,7 +120,6 @@ for c in contours:
         cv2.drawContours(thres_sudoku, c, -1, (0, 255, 0), 3)
         break
 
-'''
 
 
 #print(len(target))
