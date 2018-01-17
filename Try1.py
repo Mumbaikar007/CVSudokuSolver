@@ -91,6 +91,19 @@ sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
 print ( len ( contours ) )
 
+'''
+for c in contours:
+
+    p = cv2.arcLength(c, True)
+    approx = cv2.approxPolyDP(c, 0.02 * p, True)
+
+    if len(approx) == 4:
+        target = approx
+        cv2.drawContours(thres_sudoku, c, -1, (0, 255, 0), 3)
+        break
+
+'''
+
 for c in contours:
     p = cv2.arcLength(c, True)
     approx = cv2.approxPolyDP(c, 0.02 * p, True)
