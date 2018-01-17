@@ -1,6 +1,7 @@
 
 import cv2
 import numpy as np
+import digitRecog as dr
 
 def shrink_image ( image ):
 
@@ -69,7 +70,6 @@ for Contour in contours:
 Perimeter_of_Contour = cv2.arcLength(Required_Square_Contour, True)
 Temp_Square_Countour = cv2.approxPolyDP(Required_Square_Contour, 0.05 * Perimeter_of_Contour, True)
 cv2.drawContours(sudoku_image, Required_Square_Contour, -1, (0, 255, 0), 3)
-
 
 
 
