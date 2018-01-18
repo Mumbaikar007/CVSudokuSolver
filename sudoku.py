@@ -3,6 +3,15 @@ import cv2
 import numpy as np
 import digitRecog as dr
 
+
+def identify(img,x,y):
+    cropped = img[y:y+50,x:x+50]
+    cv2.imshow("Cropped",cropped)
+    dr.IdentifyNumbers(cropped)
+    cv2.waitKey()
+
+
+
 def shrink_image ( image ):
 
     # we need to keep in mind aspect ratio so the image does
@@ -127,4 +136,27 @@ print ( wrapped_sudoku.shape )
 
 cv2.imshow( 'Gray',wrapped_sudoku)
 cv2.waitKey(0)
+
+
+
+#################### tanmay ###################
+cells = [np.hsplit(row,9) for row in np.vsplit(wrapped_sudoku,9)]
+x = np.array(cells)
+print ("The shape of our cells array: " + str(x.shape))
+
+############ image is fragmented but dk how to use
+xcood, ycood = 0,0
+for y in range(9):
+    xcood = 0
+    for x in range(9):
+        cv2.rectangle(wrapped_sudoku,(xcood,ycood),(xcood + 50,ycood + 50),(0,255,0),5)
+        identify(wrapped_sudoku,xcood,ycood)
+        cv2.imshow("Frag",wrapped_sudoku)
+        cv2.waitKey()
+        xcood += 50
+    ycood += 50
+
+
+
+
 cv2.destroyAllWindows()
