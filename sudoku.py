@@ -2,6 +2,8 @@
 import cv2
 import numpy as np
 import digitRecog as dr
+import ocrRecognizer
+
 
 
 def identify(img,x,y):
@@ -124,8 +126,10 @@ for i in Required_Square_Contour:
 #cv2.circle( sudoku_image, (left_bottom_corner[0], left_bottom_corner[1]), 15, ( 0, 0, 255), -1)
 #cv2.rectangle( sudoku_image, (left_top_corner[0], left_top_corner[1]), (right_bottom_corner[0], right_bottom_corner[1]), ( 0, 0, 255), 2)
 
-wrapped_sudoku = wrapper ( sudoku_image, left_top_corner, right_top_corner,
+wrapped_sudoku = wrapper ( blur_gray_sudoku, left_top_corner, right_top_corner,
                            right_bottom_corner, left_bottom_corner )
+
+wrapped_sudoku = cv2.adaptiveThreshold(wrapped_sudoku,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
 print ( wrapped_sudoku.shape )
 
@@ -134,17 +138,25 @@ print ( wrapped_sudoku.shape )
 #wrapped = four_point_transform(thres_sudoku.copy(), target)
 #cv2.drawContours(thres_sudoku, [target], -1, ( 0, 255, 0), 3)
 
+
+#wrapped_sudoku = cv2.bitwise_not(wrapped_sudoku)
 cv2.imshow( 'Gray',wrapped_sudoku)
 cv2.waitKey(0)
 
 
+ocrRecognizer.recognise( wrapped_sudoku )
 
-#################### tanmay ###################
+
+'''
+#============= tanmay ===============#
 cells = [np.hsplit(row,9) for row in np.vsplit(wrapped_sudoku,9)]
 x = np.array(cells)
 print ("The shape of our cells array: " + str(x.shape))
 
-############ image is fragmented but dk how to use
+############
+
+
+# image is fragmented but dk how to use
 xcood, ycood = 0,0
 for y in range(9):
     xcood = 0
@@ -155,6 +167,8 @@ for y in range(9):
         cv2.waitKey()
         xcood += 50
     ycood += 50
+'''
+
 
 
 
