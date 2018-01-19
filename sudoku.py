@@ -2,8 +2,7 @@
 import cv2
 import numpy as np
 import digitRecog as dr
-import ocrRecognizer
-
+from DigitsRecognitionML import ocrRecognizer
 
 
 def identify(img,x,y):
@@ -144,7 +143,7 @@ cv2.imshow( 'Gray',wrapped_sudoku)
 cv2.waitKey(0)
 
 
-ocrRecognizer.recognise( wrapped_sudoku )
+ocrRecognizer.recognise(wrapped_sudoku)
 
 
 '''

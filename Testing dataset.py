@@ -61,41 +61,40 @@ def resize_to_pixel(dimensions, image):
 
 
 
-image = cv2.imread( 'images/digits_sudoku.png')
+image = cv2.imread( 'images/digits_sudoku4.png')
 
+image = cv2.resize( image, None, fx=2, fy=2,)
 gray = cv2.cvtColor( image, cv2.COLOR_BGR2GRAY)
 
-blur = cv2.GaussianBlur( gray, (5,5), 0 )
 
-threshed = cv2.adaptiveThreshold( blur,255,1,1,11,2)
+cells = [np.hsplit(row, 39) for row in np.vsplit(gray, 9)]
 
-contours, hierarchy = cv2.findContours( threshed,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
+# Convert the List data type to Numpy Array of shape (50,100,20,20)
+x = np.array(cells)
+print ("The shape of our cells array: " + str(x.shape))
 
-print(len(contours))
+# Split the full data set into two segments
+# One will be used fro Training the model, the other as a test data set
+train = x.astype(np.float32)  # Size = (3500,400)
+# Create labels for train and test data
+k = [ 1, 2, 3, 4, 5, 6, 7, 8, 9]
+train_labels = np.repeat( k, 468)[:, np.newaxis]
 
-for c in contours:
 
-    (x, y, w, h) = cv2.boundingRect(c)
+# Initiate kNN, train the data, then test it with test data for k=3
+knn = cv2.KNearest()
+knn.train(train, train_labels)
+#ret, result, neighbors, distance = knn.find_nearest(test, k=3)
 
-    roi = blur[y:y + h, x:x + w]
-    ret, roi = cv2.threshold(roi, 50, 255, cv2.THRESH_BINARY_INV)
-    squared = makeSquare(roi)
-    final = resize_to_pixel(20, squared)
+# Now we check the accuracy of classification
+# For that, compare the result with test_labels and check which are wrong
+'''
+matches = result == test_labels
+correct = np.count_nonzero(matches)
+accuracy = correct * (100.0 / result.size)
+print("Accuracy is = %.2f" % accuracy + "%")
+'''
 
-    cv2.imshow('sq', final)
-    final_array = final.reshape((1, 400))
-    final_array = final_array.astype(np.float32)
-    #ret, result, neighbours, dist = knn.find_nearest(final_array, k=1)
-    #number = str(int(float(result[0])))
-    #full_number.append(number)
-    # draw a rectangle around the digit, the show what the
-    # digit was classified as
-    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-    #cv2.putText(image, number, (x, y + 155), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 0, 0), 2)
-    cv2.imshow("image", image)
-    cv2.waitKey(0)
-
-cells = [np.hsplit(row, 5) for row in np.vsplit(gray, 34)]
 
 cv2.imshow( 'Sudoku', gray)
 cv2.waitKey(0)
